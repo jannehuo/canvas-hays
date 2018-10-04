@@ -19272,7 +19272,9 @@ var c = document.getElementById('canvas');
 var context = c.getContext('2d');
 var screen = {
   w: window.innerWidth,
-  h: window.innerHeight
+  h: window.innerHeight,
+  w4: window.innerWidth / 4,
+  h4: window.innerHeight / 4
 };
 var mouse = {
   x: false,
@@ -19284,7 +19286,7 @@ var mousePos = {
 };
 c.width = screen.w;
 c.height = screen.h;
-var amount = 1000;
+var amount = screen.w * 0.6;
 
 var Particle =
 /*#__PURE__*/
@@ -19292,9 +19294,9 @@ function () {
   function Particle(id, x, y) {
     _classCallCheck(this, Particle);
 
-    var xSpread = _lodash.default.random(-350, 350);
+    var xSpread = _lodash.default.random(-screen.w4, screen.w4);
 
-    var ySpread = _lodash.default.random(-350, 350);
+    var ySpread = _lodash.default.random(-screen.h4, screen.h4);
 
     var xPos = x + xSpread;
     var yPos = y + ySpread;
@@ -19305,7 +19307,7 @@ function () {
     this.y0 = yPos;
     this.xVel = 0;
     this.yVel = 0;
-    this.colors = ["#f2f2f2", "#dbdbdb", "#ececec", "#c6c6c6"];
+    this.colors = ["#ffafd0", "#ff96c1", "#fc7bb0", "#ff66a4"];
     this.color = _lodash.default.sample(this.colors);
     this.radius = _lodash.default.random(3, 8);
   }
@@ -19415,7 +19417,7 @@ function () {
   }, {
     key: "getRepel",
     value: function getRepel(distance) {
-      var maxDistance = 200;
+      var maxDistance = 150;
       var force = (maxDistance - distance) / maxDistance;
 
       if (force < 0) {
@@ -19531,7 +19533,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55073" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55343" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

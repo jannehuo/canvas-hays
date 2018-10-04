@@ -3,7 +3,9 @@ const c = document.getElementById('canvas');
 const context = c.getContext('2d');
 const screen = {
   w: window.innerWidth,
-  h: window.innerHeight
+  h: window.innerHeight,
+  w4: window.innerWidth / 4,
+  h4: window.innerHeight / 4
 };
 let mouse = {
   x:false,
@@ -17,12 +19,12 @@ let mousePos = {
 
 c.width = screen.w;
 c.height = screen.h;
-const amount = 1000;
+const amount = screen.w * 0.6;
 
 class Particle {
   constructor(id,x,y) {
-    const xSpread = _.random(-350,350);
-    const ySpread = _.random(-350,350)
+    const xSpread = _.random(-screen.w4,screen.w4);
+    const ySpread = _.random(-screen.h4,screen.h4)
     const xPos = x + xSpread;
     const yPos = y + ySpread;
     this.id = id;
@@ -32,7 +34,7 @@ class Particle {
     this.y0 = yPos;
     this.xVel = 0;
     this.yVel = 0;
-    this.colors = ["#f2f2f2","#dbdbdb","#ececec","#c6c6c6"];
+    this.colors = ["#ffafd0","#ff96c1","#fc7bb0","#ff66a4"];
     this.color = _.sample(this.colors);
     this.radius = _.random(3,8);
   }
@@ -121,7 +123,7 @@ class Particle {
     return distance;
   }
   getRepel(distance) {
-    let maxDistance = 200;
+    let maxDistance = 150;
     let force = (maxDistance - distance) / maxDistance;
 
     if(force < 0 ) {
