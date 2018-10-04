@@ -16,7 +16,7 @@ let mousePos = {
   x:0,
   y:0
 };
-
+let maxDistance = 150;
 c.width = screen.w;
 c.height = screen.h;
 const amount = screen.w * 0.6;
@@ -37,6 +37,9 @@ class Particle {
     this.colors = ["#ffafd0","#ff96c1","#fc7bb0","#ff66a4"];
     this.color = _.sample(this.colors);
     this.radius = _.random(3,8);
+    this.launchDirection = {};
+    this.launchActive = false;
+    this.release = false;
   }
   draw() {
     context.beginPath();
@@ -88,7 +91,9 @@ class Particle {
     const relativeToMouse = this.getRelativeTo(this,mousePos);
     const distance = this.getDistance(relativeToMouse);
     const direction = this.getDirection(relativeToMouse, distance);
+    this.launchDirection = direction;
     const force = this.getRepel(distance);
+    
     if(force > 0) {
       this.repel(direction, force);
     } else {
@@ -96,8 +101,13 @@ class Particle {
     }
   }
   repel(direction,force) {
-    this.xVel += direction.x * force * 3;
-    this.yVel += direction.y * force * 3;
+    if(this.release) {
+      this.xVel += direction.x;
+      this.yVel += direction.y;
+    } else {
+      this.xVel += direction.x * force * 3;
+      this.yVel += direction.y * force * 3;
+    }
   }
   resume() {
     const relativeToDefault = this.getRelativeTo({x:this.x0,y:this.y0},this);
@@ -123,9 +133,7 @@ class Particle {
     return distance;
   }
   getRepel(distance) {
-    let maxDistance = 150;
     let force = (maxDistance - distance) / maxDistance;
-
     if(force < 0 ) {
       force = 0;
     }

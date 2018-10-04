@@ -19284,6 +19284,7 @@ var mousePos = {
   x: 0,
   y: 0
 };
+var maxDistance = 150;
 c.width = screen.w;
 c.height = screen.h;
 var amount = screen.w * 0.6;
@@ -19310,6 +19311,9 @@ function () {
     this.colors = ["#ffafd0", "#ff96c1", "#fc7bb0", "#ff66a4"];
     this.color = _lodash.default.sample(this.colors);
     this.radius = _lodash.default.random(3, 8);
+    this.launchDirection = {};
+    this.launchActive = false;
+    this.release = false;
   }
 
   _createClass(Particle, [{
@@ -19372,6 +19376,7 @@ function () {
       var relativeToMouse = this.getRelativeTo(this, mousePos);
       var distance = this.getDistance(relativeToMouse);
       var direction = this.getDirection(relativeToMouse, distance);
+      this.launchDirection = direction;
       var force = this.getRepel(distance);
 
       if (force > 0) {
@@ -19383,8 +19388,13 @@ function () {
   }, {
     key: "repel",
     value: function repel(direction, force) {
-      this.xVel += direction.x * force * 3;
-      this.yVel += direction.y * force * 3;
+      if (this.release) {
+        this.xVel += direction.x;
+        this.yVel += direction.y;
+      } else {
+        this.xVel += direction.x * force * 3;
+        this.yVel += direction.y * force * 3;
+      }
     }
   }, {
     key: "resume",
@@ -19417,7 +19427,6 @@ function () {
   }, {
     key: "getRepel",
     value: function getRepel(distance) {
-      var maxDistance = 150;
       var force = (maxDistance - distance) / maxDistance;
 
       if (force < 0) {
@@ -19533,7 +19542,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55343" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52661" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);
