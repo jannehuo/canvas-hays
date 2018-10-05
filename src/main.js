@@ -19,7 +19,7 @@ let mousePos = {
 let maxDistance = 150;
 c.width = screen.w;
 c.height = screen.h;
-const amount = screen.w * 0.6;
+const amount = screen.w * 0.8;
 
 class Particle {
   constructor(id,x,y) {
@@ -185,11 +185,27 @@ class HayField {
 }
 
 window.addEventListener('mousemove', (e) => {
+  updatePos(e.clientX,e.clientY);
+},true);
+
+window.addEventListener('touchmove', (e) => {
+  const touch = e.touches[0];
+  updatePos(touch.clientX,touch.clientY);
+},true);
+
+window.addEventListener('touchend', (e) => {
   mousePos = {
-    x: e.clientX,
-    y: e.clientY
+    x: 0,
+    y:0
   };
 },true);
+
+const updatePos = (x,y) => {
+  mousePos = {
+    x: x,
+    y: y
+  };
+}
 
 const animate = () => {
   requestAnimationFrame(animate);
